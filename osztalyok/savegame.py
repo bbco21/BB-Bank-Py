@@ -16,13 +16,11 @@ class Savegame:
                 self.transactions.append(self.saveList[i])
         del self.saveList
 
-
     def teszt(self):
         # Ez egy teszt fuggveny aminek mar nem vagom, h mi a lenyege, de nem merem kitorolni
         print(self.numberOfPlayers)
         for player in self.players: print(player.name)
         for transaction in self.transactions: print(transaction.transaction_from, "->", transaction.transaction_money, transaction.transaction_to)
-
 
     def getFinalSaveString(self) -> str:
         # fss = final save string
@@ -36,11 +34,9 @@ class Savegame:
             fss += transaction.getSaveString(); fss += "\n"
         return fss.strip()
 
-
     def getSaveData(self) -> tuple:
         saveData = (self.saveName, self.getFinalSaveString())
         return saveData
-
 
     def makeTransaction(self) -> None:
         gc.cls()
@@ -59,7 +55,7 @@ class Savegame:
 
         gc.cls()
         print(gc.MESSAGE)
-        transactionMoney = int(input("Utalando osszeg: "))
+        transactionMoney = self.moneyInput()
         
         if self.players[playerFromIndex].money-transactionMoney >= gc.MIN_MONEY:
             self.players[playerFromIndex].money -= transactionMoney
@@ -72,6 +68,21 @@ class Savegame:
             input("NEM ALL RENDELKEZESRE ELEGENDO EGYENLEG AZ UTALO FEL SZAMLAJAN!\nNyomj ENTER-t a folytatashoz...")
             return None
 
+    def moneyInput(self) -> int:
+        inputStr = str(input("Osszeg: "))
+        if inputStr.isdecimal():
+            return int(inputStr)
+        else:
+            lastChar = inputStr[len(inputStr) - 1]
+            if lastChar == "m":
+                inputStr = inputStr[:-1]
+                return int(float(inputStr) * 1_000_000)
+            elif lastChar == "k":
+                inputStr = inputStr[:-1]
+                return int(float(inputStr) * 1_000)
+            else:
+                input("Hibas a bemenet szintaxisa. Tranzakcio vegrehajtasa 0 osszeggel.\nProbald ujra a tranzakciot.")
+                return 0
 
     def givePlayerMoney(self) -> None:
         gc.cls()
@@ -83,13 +94,12 @@ class Savegame:
 
         gc.cls()
         print(gc.MESSAGE)
-        moneyToGive = int(input("Hozzaaadando penz osszege: "))
+        moneyToGive = self.moneyInput()
 
         self.players[playerToIndex].money += moneyToGive
 
         self.addTransaction(transaction.Transaction("h", "bank", self.players[playerToIndex].name, moneyToGive))
         return None
-
 
     def removePlayerMoney(self) -> None:
         gc.cls()
@@ -101,7 +111,7 @@ class Savegame:
 
         gc.cls()
         print(gc.MESSAGE)
-        moneyToRemove = int(input("Levonando osszeg: "))
+        moneyToRemove = self.moneyInput()
 
         if self.players[playerFromIndex].money-moneyToRemove >= gc.MIN_MONEY:
             self.players[playerFromIndex].money -= moneyToRemove
@@ -110,7 +120,6 @@ class Savegame:
         else:
             input("NEM ALL RENDELKEZESRE ELEGENDO OSSZEG!\nNyomj ENTER-t a folytatashoz...")
             return None
-
 
     def playerStartMoney(self) -> None:
         gc.cls()
@@ -124,30 +133,36 @@ class Savegame:
 
         return None
 
-
     def addTransaction(self, transaction) -> None:
+        transaction_from = transaction.transaction_from
+        transaction_to = transaction.transaction_to
+        if transaction_from != "bank":
+            for player in self.players:
+                if player.name == transaction_from:
+                    player.addTransaction(transaction)
+        if transaction_to != "bank":
+            for player in self.players:
+                if player.name == transaction_to:
+                    player.addTransaction(transaction)
+
         self.transactions.append(transaction)
         return None
-
 
     def createTransaction(self, tr_type, tr_from, tr_to, tr_money) -> None:
         self.addTransaction(transaction.Transaction(tr_type, tr_from, tr_to, tr_money))
         return None
 
-
     def getPlayersInfo(self) -> str:
         strToRtn = ""
         for player in self.players:
-            strToRtn += str(player.name) + " " + str(player.money) + "\n"
+            strToRtn += str(player.name) + " " + f"{int(player.money):_}" + "\n"
         return gc.spacesback(strToRtn)
-
 
     def getTransactionsList(self) -> list:
         transactionsList = []
         for transaction in self.transactions:
             transactionsList.append((transaction.transaction_type, transaction.transaction_from, transaction.transaction_to, transaction.transaction_money))
         return transactionsList
-
 
     def printTransactions(self) -> None:
         gc.cls()
@@ -163,13 +178,20 @@ class Savegame:
                 print(f"ISMERETLEN TRANZAKCIO ({transaction})")
         return None
 
-
     def playerTransactionsInit(self):
         for transaction in self.transactions:
-            for player in self.players:
-                if transaction.transaction_from == player.name or transaction.transaction_to == player.name:
-                    player.addTransaction(transaction)
-
+            if transaction.transaction_from == "bank":
+                pass
+            else:
+                for player in self.players:
+                    if player.name == transaction.transaction_from:
+                        player.addTransaction(transaction)
+            if transaction.transaction_to == "bank":
+                pass
+            else:
+                for player in self.players:
+                    if player.name == transaction.transaction_to:
+                        player.addTransaction(transaction)
 
     def getTmpSaveData(self) -> tuple:
         originalSaveData = self.getSaveData()
