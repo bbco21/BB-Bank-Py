@@ -5,6 +5,7 @@ import main
 
 
 fh = filehandler.FileHandler()
+saveFiles = fh.readSaves()
 
 ########################
 gc.cls()
@@ -12,8 +13,6 @@ print(gc.MESSAGE)
 
 print("Valassz mentest:")
 print("0 - Uj mentes letrehozasa")
-
-saveFiles = fh.readSaves()
 for i in range(len(saveFiles)):
     print(gc.spacesback(f"{i+1} - {saveFiles[i]}"))
 

@@ -1,2 +1,2 @@
 # BB-Bank
-BB Co. financial software for monopoly
+## BB Co. financial software for monopoly
