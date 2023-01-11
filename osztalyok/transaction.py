@@ -13,8 +13,6 @@ class Transaction:
         
     # Visszakuld egy mentesi stringet az objektumrol
     def getSaveString(self) -> str:
-        # TODO a self.player_budget a jatekos akkori penzet tartalmazza
-        #      mivel hozzaadtam ezt, ezert ezt at kene gondolnom, hogy miket baszhat el
         return str(self.transaction_type+'||'+self.transaction_from+'||'+self.transaction_to+'||'+str(self.transaction_money))
         #return str(self.transaction_type+'||'+self.transaction_from+'||'+self.transaction_to+'||'+str(self.transaction_money)+'||'+str(self.player_budget))
         

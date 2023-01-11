@@ -1,8 +1,8 @@
 3
 |-|
-Kolbasz||12850000
-Macsa||15250000
-Az<*?*>Ur||19650000
+Kolbasz||350000
+Macsa||25250000
+Az<*?*>Ur||22150000
 |-|
 K||bank||Kolbasz||15000000
 K||bank||Macsa||15000000
@@ -13,3 +13,8 @@ e||Macsa||bank||750000
 S||bank||Az<*?*>Ur||2000000
 u||Kolbasz||Az<*?*>Ur||500000
 u||Kolbasz||Macsa||1000000
+u||Kolbasz||Kolbasz||6
+u||Az<*?*>Ur||Az<*?*>Ur||1000000
+u||Kolbasz||Macsa||10000000
+u||Kolbasz||Az<*?*>Ur||1000000
+u||Kolbasz||Az<*?*>Ur||1500000

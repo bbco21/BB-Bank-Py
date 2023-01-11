@@ -23,6 +23,7 @@ class Player():
         return gc.spacesback(strToReturn)
 
 
+    
     def printTransactions(self) -> None:
         gc.cls()
         print(gc.MESSAGE)

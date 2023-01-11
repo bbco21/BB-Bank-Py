@@ -1,4 +1,5 @@
 from os import system
+import sys
 
 BANNER = '------------------------------------\nBB Bank\n'
 PHASE = 'ALPHA'
@@ -11,7 +12,14 @@ MIN_MONEY = 0
 START_MONEY = 2000000
 
 def cls():
-    system("cls")
+    if sys.platform == "win32":
+        system("cls")
+    elif sys.platform == "linux":
+        system("clear")
+    else:
+        print("Console clear is not implemented yet on this platform.")
+        print("Please contact the developer on the following e-mail and describe the problem and the system you are using.")
+        print("levente@bbco.hu")
 
 def wait():
     input("\nNyomj ENTER-t a folytatashoz...")
