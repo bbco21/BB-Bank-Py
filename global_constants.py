@@ -20,6 +20,10 @@ def cls():
         print("Console clear is not implemented yet on this platform.")
         print("Please contact the developer on the following e-mail and describe the problem and the system you are using.")
         print("levente@bbco.hu")
+        try:
+            system("clear")
+        except:
+            pass
 
 def wait():
     input("\nNyomj ENTER-t a folytatashoz...")
