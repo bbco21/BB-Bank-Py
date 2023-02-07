@@ -1,5 +1,6 @@
 from osztalyok import transaction, player, filehandler
 import global_constants as gc
+import sys
 
 # a savegame osztaly kezeli az egesz jatekot
 class Savegame:
@@ -225,6 +226,20 @@ class Savegame:
         originalSaveData = self.getSaveData()
         alteredSaveData = (str(self.saveName + "_"), originalSaveData[1])
         return alteredSaveData
+
+    def validateBalance(self, players, transactions):
+        for player in players:
+            balance = 0
+            if transaction.transaction_to == player.name:
+                balance += transaction.transaction_money
+            if transaction.Transaction_from == player.name:
+                balance -= transaction.Transaction_money
+
+            if player.money != balance:
+                gc.cls()
+                print("A tranzakciok validalasa sikertelen!/nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
+                gc.wait()
+                sys.exit()
 
 
 # Beker minden adatot ami elengedhetetlen egy savegame objektum letrehozasahoz majd letrehozza es visszater vele

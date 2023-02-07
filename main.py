@@ -1,6 +1,10 @@
 import global_constants as gc
+import sys
 
-
+if __name__ == "__main__":
+    gc.cls()
+    print("Kerlek az init.py-t futtasd!")
+    sys.exit()
 
 def mainLoop(fileHandler, savegame) -> None:
     while True:
@@ -65,6 +69,9 @@ def mainLoop(fileHandler, savegame) -> None:
                 gc.wait()
             else:
                 input("NINCS ILYEN SORSZAMU JATEKOS!\nNyomj ENTER-t a folytatashoz...")
+        elif userCh == 9:
+            for i in range(50000):
+                savegame.createTransaction('h', 'a', 'b', 1)
         else:
             input("NINCS ILYEN OPCIO!\nNyomj ENTER-t a folytatashoz...")
             
