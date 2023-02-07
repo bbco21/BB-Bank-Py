@@ -1,9 +1,14 @@
 import global_constants as gc
-import sys
+import sys, subprocess
 
 if __name__ == "__main__":
     gc.cls()
     print("Kerlek az init.py-t futtasd!")
+    print("A program most megprobalja elinditani az init.py-t")
+    print("Nem biztos, hogy a program igy megfeleloen fog mukodni")
+    print("Hiba eseten futtasa manualisan az init.py-t")
+    gc.wait()
+    subprocess.run(["python3", "init.py"])
     sys.exit()
 
 def mainLoop(fileHandler, savegame) -> None:
