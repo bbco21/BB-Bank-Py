@@ -230,14 +230,15 @@ class Savegame:
     def validateBalance(self, players, transactions):
         for player in players:
             balance = 0
-            if transaction.transaction_to == player.name:
-                balance += transaction.transaction_money
-            if transaction.Transaction_from == player.name:
-                balance -= transaction.Transaction_money
+            for tr in transactions:
+                if tr.transaction_to == player.name:
+                    balance += int(tr.transaction_money)
+                if tr.transaction_from == player.name:
+                    balance -= int(tr.transaction_money)
 
             if player.money != balance:
                 gc.cls()
-                print("A tranzakciok validalasa sikertelen!/nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
+                print("A tranzakciok validalasa sikertelen!\nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
                 gc.wait()
                 sys.exit()
 

@@ -3,7 +3,7 @@ import global_constants as gc
 from osztalyok import filehandler, savegame
 import main
 
-def main():
+def mainfgv():
     fh = filehandler.FileHandler()
     saveFiles = fh.readSaves()
 
@@ -38,4 +38,4 @@ def main():
     gc.cls()
     print("EXITING APPLICATION...")
 
-main()
+mainfgv()
