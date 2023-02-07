@@ -31,6 +31,7 @@ def main():
 
 
     sg.playerTransactionsInit()
+    sg.validateBalance(sg.players, sg.transactions)
 
     main.mainLoop(fh, sg)
 
