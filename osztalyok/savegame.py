@@ -1,6 +1,6 @@
 from osztalyok import transaction, player, filehandler
 import global_constants as gc
-import sys
+import sys, hashlib
 
 # a savegame osztaly kezeli az egesz jatekot
 class Savegame:
@@ -241,6 +241,14 @@ class Savegame:
                 print("A tranzakciok validalasa sikertelen!\nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
                 gc.wait()
                 sys.exit()
+
+    def validateFile(self, hash):
+        selfhash = hashlib.sha512(str(self.getFinalSaveString() + gc.S).encode('utf-8')).hexdigest()
+        if hash != selfhash:
+            gc.cls()
+            print("A fajl validalasa sikertelen!\nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
+            gc.wait()
+            sys.exit()
 
 
 # Beker minden adatot ami elengedhetetlen egy savegame objektum letrehozasahoz majd letrehozza es visszater vele

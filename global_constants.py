@@ -2,14 +2,18 @@ from os import system
 import sys
 
 BANNER = '------------------------------------\nBB Bank\n'
-PHASE = 'ALPHA'
+PHASE = 'BETA'
 VERSION = '1.0.0'
 
-MESSAGE = BANNER + PHASE + VERSION + '\n'
+MESSAGE = BANNER + PHASE + " " + VERSION + '\n'
 
 MIN_PLAYERS = 2
 MIN_MONEY = 0
 START_MONEY = 2000000
+
+ARGV = None
+
+S = '420'
 
 def cls():
     if sys.platform == "win32":

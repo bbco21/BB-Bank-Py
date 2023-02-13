@@ -1,5 +1,6 @@
 import global_constants as gc
 import sys, subprocess
+import osztalyok.filehandler, osztalyok.savegame
 
 if __name__ == "__main__":
     gc.cls()
@@ -9,9 +10,10 @@ if __name__ == "__main__":
     print("Hiba eseten futtasa manualisan az init.py-t")
     gc.wait()
     subprocess.run(["python3", "init.py"])
+    subprocess.run(["python", "init.py"])
     sys.exit()
 
-def mainLoop(fileHandler, savegame) -> None:
+def mainLoop(fileHandler: osztalyok.filehandler.FileHandler, savegame: osztalyok.savegame.Savegame) -> None:
     while True:
         # FOMENU letrehozasa
         # Muveletek a fomenuben
@@ -39,6 +41,10 @@ def mainLoop(fileHandler, savegame) -> None:
             userCh = int(input("Valasz: "))
 
             if userCh == 1:
+                if "-u" in gc.ARGV or "--unsafe" in gc.ARGV:
+                    pass
+                else:
+                    fileHandler.writehash(savegame.saveName, savegame.getFinalSaveString())
                 fileHandler.save(savegame.getSaveData())
                 fileHandler.delIfExists(savegame.getTmpSaveData()[0])
                 return None
