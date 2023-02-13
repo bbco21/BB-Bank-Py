@@ -4,3 +4,5 @@ kolbi.levdb
 start.bat
 __pycache__
 tesztsave.levdb
+*.pyc
+*.cpython-39.pyc
