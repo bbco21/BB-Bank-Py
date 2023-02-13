@@ -41,10 +41,7 @@ def mainLoop(fileHandler: osztalyok.filehandler.FileHandler, savegame: osztalyok
             userCh = int(input("Valasz: "))
 
             if userCh == 1:
-                if "-u" in gc.ARGV or "--unsafe" in gc.ARGV:
-                    pass
-                else:
-                    fileHandler.writehash(savegame.saveName, savegame.getFinalSaveString())
+                fileHandler.writehash(savegame.saveName, savegame.getFinalSaveString())
                 fileHandler.save(savegame.getSaveData())
                 fileHandler.delIfExists(savegame.getTmpSaveData()[0])
                 return None
