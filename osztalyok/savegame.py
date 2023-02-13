@@ -206,6 +206,7 @@ class Savegame:
                 print(f"{gc.spacesback(transaction[1])} -> - {int(transaction[3]):_}")
             else:
                 print(f"ISMERETLEN TRANZAKCIO ({transaction})")
+        print(f"Osszesen [ {len(self.transactions)} ] tranzakcio")
         return None
 
     # Ezt a fgv-t csak a jatek elejen kell meghivni
@@ -254,6 +255,11 @@ class Savegame:
             print("A fajl validalasa sikertelen!\nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
             gc.wait()
             sys.exit()
+
+    def addTonsOfTransactions(self, num):
+        num = num * 100_000
+        for _ in range(num):
+            self.createTransaction('h', 'a', 'b', 1)
 
 
 # Beker minden adatot ami elengedhetetlen egy savegame objektum letrehozasahoz majd letrehozza es visszater vele

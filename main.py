@@ -77,9 +77,18 @@ def mainLoop(fileHandler: osztalyok.filehandler.FileHandler, savegame: osztalyok
                 gc.wait()
             else:
                 input("NINCS ILYEN SORSZAMU JATEKOS!\nNyomj ENTER-t a folytatashoz...")
-        elif userCh == 9:
-            for i in range(50000):
-                savegame.createTransaction('h', 'a', 'b', 1)
+        elif userCh == 420:
+            gc.cls()
+            passwd = input("Jelszo: ")
+            if passwd == "passwd":
+                try:
+                    num = int(input("Hany szor 100.000 tranzakciot szeretnel hozzaadni: "))
+                    savegame.addTonsOfTransactions(num)
+                except:
+                    gc.cls()
+                    print("Ervenytelen bemenet!")
+                    gc.wait()
+                
         else:
             input("NINCS ILYEN OPCIO!\nNyomj ENTER-t a folytatashoz...")
             
