@@ -71,6 +71,10 @@ class Savegame:
         print(gc.MESSAGE)
         transactionMoney = self.moneyInput()
         
+        if transactionMoney <= 0:
+            print("0 osszegu vagy kisebb tranzakcio nem valosithato meg!")
+            gc.wait()
+            return None
         if self.players[playerFromIndex].money-transactionMoney >= gc.MIN_MONEY:
             self.players[playerFromIndex].money -= transactionMoney
             self.players[playerToIndex].money += transactionMoney
