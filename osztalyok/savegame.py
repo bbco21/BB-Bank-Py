@@ -227,6 +227,7 @@ class Savegame:
         alteredSaveData = (str(self.saveName + "_"), originalSaveData[1])
         return alteredSaveData
 
+    # A mentesfajlbol beolvasott tranzakciok osszegenek kiszamolasa jatekosonkent es annak validalasa
     def validateBalance(self, players, transactions):
         for player in players:
             balance = 0
