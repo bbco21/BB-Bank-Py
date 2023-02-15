@@ -23,7 +23,7 @@ def mainLoop(fileHandler: osztalyok.filehandler.FileHandler, savegame: osztalyok
         print(gc.MESSAGE)
 
         playersInfo = savegame.getPlayersInfo()
-        print(savegame.getPlayersInfo())
+        print(playersInfo)
 
         print("1 - Utalas ket jatekos kozott")
         print("2 - Penz hozzaadasa jatekoshoz")

@@ -118,8 +118,12 @@ class Savegame:
         moneyToGive = self.moneyInput()
 
         self.players[playerToIndex].money += moneyToGive
-
-        self.addTransaction(transaction.Transaction("h", "bank", self.players[playerToIndex].name, moneyToGive))
+        if moneyToGive > 0:
+            self.addTransaction(transaction.Transaction("h", "bank", self.players[playerToIndex].name, moneyToGive))
+        else:
+            gc.cls()
+            print("0 vagy negativ erteku tranzakcio nem valosithato meg!")
+            gc.wait()
         return None
 
     # Ha egy jatekostol el kell venni penzt nem utalas celjabol ez a fgv leelenorzi, hogy megvalosithato-e a tranzakcio
@@ -137,8 +141,13 @@ class Savegame:
         moneyToRemove = self.moneyInput()
 
         if self.players[playerFromIndex].money-moneyToRemove >= gc.MIN_MONEY:
-            self.players[playerFromIndex].money -= moneyToRemove
-            self.addTransaction(transaction.Transaction("e", self.players[playerFromIndex].name, "bank", moneyToRemove))
+            if moneyToRemove > 0:
+                self.players[playerFromIndex].money -= moneyToRemove
+                self.addTransaction(transaction.Transaction("e", self.players[playerFromIndex].name, "bank", moneyToRemove))
+            else:
+                gc.cls()
+                print("0 vagy negativ erteku tranzakcio nem valosithato meg!")
+                gc.wait()
             return None
         else:
             input("NEM ALL RENDELKEZESRE ELEGENDO OSSZEG!\nNyomj ENTER-t a folytatashoz...")
