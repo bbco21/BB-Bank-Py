@@ -257,6 +257,8 @@ class Savegame:
                 gc.wait()
                 sys.exit()
 
+    # Ez a fgv osszehasonlitja a betoltendo fajl hashet a mentettel
+    # amennyiben nem egyeznek, a program kilep (security measures)
     def validateFile(self, hash):
         selfhash = hashlib.sha512(str(self.getFinalSaveString() + gc.S).encode('utf-8')).hexdigest()
         if hash != selfhash:
@@ -265,6 +267,7 @@ class Savegame:
             gc.wait()
             sys.exit()
 
+    # Ez a fgv csupan tesztelesi celokat szolgal
     def addTonsOfTransactions(self, num):
         num = num * 100_000
         for _ in range(num):
