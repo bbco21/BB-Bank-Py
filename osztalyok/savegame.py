@@ -279,7 +279,7 @@ def createNewSavegame(startingBudget) -> Savegame:
     gc.cls()
     print(gc.BANNER)
 
-    saveName = gc.removespace(input("Mentes neve: "))
+    saveName = gc.removespaceSaveName(input("Mentes neve: "))
     numberOfPlayers = int(input("Jatekosok szama: "))
     saveList = [numberOfPlayers]
 

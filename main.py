@@ -38,7 +38,10 @@ def mainLoop(fileHandler: osztalyok.filehandler.FileHandler, savegame: osztalyok
             print(gc.MESSAGE)
             print("1 - Mentes es kilepes")
             print("2 - Kilepes mentes nelkul")
-            userCh = int(input("Valasz: "))
+            try:
+                userCh = int(input("Valasz: "))
+            except:
+                userCh = 404
 
             if userCh == 1:
                 fileHandler.writehash(savegame.saveName, savegame.getFinalSaveString())

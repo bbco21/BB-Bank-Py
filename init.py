@@ -7,6 +7,7 @@ gc.ARGV = sys.argv
 
 if '-h' in gc.ARGV or '--help' in gc.ARGV:
     print(gc.MESSAGE)
+    print(f"A program mentesi helye: {gc.SAVELOCATION}\n")
     print("ROVID HOSSZU    LEIRAS")
     print(" -u   --unsafe  Minden biztonsagi ellenorzest kikapcsol")
     print(" -h   --help    Kiirja ezt az uzenetet")
@@ -14,6 +15,19 @@ if '-h' in gc.ARGV or '--help' in gc.ARGV:
 
 
 def mainfgv():
+    # Elso futas ellenorzese
+    if not os.path.exists(gc.ANCHOR_FILE):
+        print("Elso futtatas.\nFajlstruktura letrehozasa.")
+        input()
+        os.makedirs(gc.SAVEGAMESFOLDER)
+        with open(gc.ANCHOR_FILE, 'w') as f:
+            pass
+        with open(gc.SAVELOCATION+"/kezdotokek.levdb", 'w') as f:
+            f.write(gc.STARTING_BUDGET_FILE_CONTENT)
+        with open(gc.SAVEGAMESFOLDER+"/hashes.levdb", 'w') as f:
+            pass
+
+
     fh = filehandler.FileHandler()
     saveFiles = fh.readSaves()
 
@@ -24,12 +38,12 @@ def mainfgv():
     print("Valassz mentest:")
     print("0 - Uj mentes letrehozasa")
     for i in range(len(saveFiles)):
-        print(gc.spacesback(f"{i+1} - {saveFiles[i]}"))
+        print(gc.spacesbackSaveName(f"{i+1} - {saveFiles[i]}"))
 
     userCh = int(input("Valasz: ")) - 1
 
     if userCh == -1:
-        startingBudgets = fh.readStartingBudget("./kezdotokek.levdb")
+        startingBudgets = fh.readStartingBudget(f"{gc.SAVELOCATION}/kezdotokek.levdb")
         gc.cls()
         print(gc.MESSAGE)
         for i in range(len(startingBudgets)):

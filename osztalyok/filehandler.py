@@ -20,7 +20,7 @@ class FileHandler:
 
 
     def readSavegame(self, name) -> list:
-        with open(f'./saves/{name}.levdb', 'r', encoding='utf-8') as f:
+        with open(f'{gc.SAVEGAMESFOLDER}/{name}.levdb', 'r', encoding='utf-8') as f:
             
             # Pelda visszakuldott adatra
             # [numberOfPlayers, *players, *transactions]
@@ -52,7 +52,7 @@ class FileHandler:
 
 
     def writeSaveString(self, name, saveString) -> None:
-        with open(f'./saves/{name}', 'w', encoding='utf-8') as f:
+        with open(f'{gc.SAVEGAMESFOLDER}/{name}', 'w', encoding='utf-8') as f:
             f.write(saveString)
             return None
 
@@ -60,15 +60,15 @@ class FileHandler:
     def save(self, saveData) -> None:
         saveName = saveData[0]
         saveStr = saveData[1]
-        with open(f"./saves/{saveName}.levdb", "w", encoding="utf-8") as f:
+        with open(f"{gc.SAVEGAMESFOLDER}/{saveName}.levdb", "w", encoding="utf-8") as f:
             f.write(saveStr)
             return None
 
 
     def readSaves(self) -> list:
         lstToRtn = []
-        for element in listdir("./saves"):
-            if isfile(f"./saves/{element}"):
+        for element in listdir(gc.SAVEGAMESFOLDER):
+            if isfile(f"{gc.SAVEGAMESFOLDER}/{element}"):
                 if element.endswith(".levdb"):
                     if element != 'hashes.levdb':
                         lstToRtn.append(element.removesuffix(".levdb"))
@@ -77,8 +77,8 @@ class FileHandler:
         
 
     def delIfExists(self, saveName) -> None:
-        if exists(f"./saves/{saveName}.levdb"):
-            remove(f"./saves/{saveName}.levdb")
+        if exists(f"{gc.SAVEGAMESFOLDER}/{saveName}.levdb"):
+            remove(f"{gc.SAVEGAMESFOLDER}/{saveName}.levdb")
         return None
 
 
@@ -97,12 +97,12 @@ class FileHandler:
         for line in hashes:
             savestr += line[0] + "||" + line[1] + "\n"
         
-        with open("./saves/hashes.levdb", "w") as f:
+        with open(f"{gc.SAVEGAMESFOLDER}/hashes.levdb", "w") as f:
             f.write(savestr)
 
 
     def readhash(self, savename:str=None, full=False) -> str:
-        with open('./saves/hashes.levdb', 'r') as f:
+        with open(f'{gc.SAVEGAMESFOLDER}/hashes.levdb', 'r') as f:
             hashes = f.readlines()
         tmp = []
         for line in hashes:
