@@ -17,15 +17,23 @@ if '-h' in gc.ARGV or '--help' in gc.ARGV:
 def mainfgv():
     # Elso futas ellenorzese
     if not os.path.exists(gc.ANCHOR_FILE):
-        print("Elso futtatas.\nFajlstruktura letrehozasa.")
+        print("Elso futtatas.\nFajlstruktura letrehozasa.\nNyomj ENTERT...")
         input()
-        os.makedirs(gc.SAVEGAMESFOLDER)
-        with open(gc.ANCHOR_FILE, 'w') as f:
-            pass
-        with open(gc.SAVELOCATION+"/kezdotokek.levdb", 'w') as f:
-            f.write(gc.STARTING_BUDGET_FILE_CONTENT)
-        with open(gc.SAVEGAMESFOLDER+"/hashes.levdb", 'w') as f:
-            pass
+        try:
+            os.makedirs(gc.SAVEGAMESFOLDER)
+        except: pass
+        try:
+            with open(gc.ANCHOR_FILE, 'w') as f:
+                pass
+        except: pass
+        try:
+            with open(gc.SAVELOCATION+"/kezdotokek.levdb", 'w') as f:
+                f.write(gc.STARTING_BUDGET_FILE_CONTENT)
+        except: pass
+        try:
+            with open(gc.SAVEGAMESFOLDER+"/hashes.levdb", 'w') as f:
+                pass
+        except: pass
 
 
     fh = filehandler.FileHandler()

@@ -17,6 +17,7 @@ START_MONEY = 2000000
 # Save location
 SAVELOCATION = ""
 SAVEGAMESFOLDER = ""
+SETTINGSFILE = ""
 if sys.platform == "win32":
     saveloc = os.getenv("APPDATA").replace("\\", "/")
     bbcoSaveLoc = saveloc + "/BBCO"
@@ -26,7 +27,8 @@ if sys.platform == "win32":
     if not os.path.exists(bbbankSaveLoc):
         os.mkdir(bbbankSaveLoc)
     SAVELOCATION = bbbankSaveLoc
-    SAVEGAMESFOLDER = SAVELOCATION + """/saves"""
+    SAVEGAMESFOLDER = SAVELOCATION + "/saves"
+    SETTINGSFILE = SAVELOCATION + "/settings.conf"
 elif sys.platform == "linux":
     homeDir = os.path.expanduser('~')
     bbcoSaveLoc = homeDir + "/.bbco"
@@ -37,6 +39,7 @@ elif sys.platform == "linux":
         os.makedirs(bbbankSaveLoc)
     SAVELOCATION = bbbankSaveLoc
     SAVEGAMESFOLDER = SAVELOCATION + "/saves"
+    SETTINGSFILE = SAVELOCATION + "/settings.conf"
 else:
     print("This program is not implemented on this platform. You might encounter some bugs.")
     print("Please contact the developer on the following e-mail and describe the problem and the system you are using.")
@@ -50,7 +53,8 @@ else:
         if not os.path.exists(bbbankSaveLoc):
             os.mkdir(bbbankSaveLoc)
         SAVELOCATION = bbbankSaveLoc
-        SAVEGAMESFOLDER = SAVELOCATION + "/saves/"
+        SAVEGAMESFOLDER = SAVELOCATION + "/saves"
+        SETTINGSFILE = SAVELOCATION + "/settings.conf"
     except:
         raise oe.UnsupportedOsError(sys.platform)
     
