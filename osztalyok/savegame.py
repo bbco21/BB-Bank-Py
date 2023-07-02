@@ -1,15 +1,16 @@
-from osztalyok import transaction, player, filehandler
+from osztalyok import transaction, player, filehandler, settingsmanager
 import global_constants as gc
 import sys, hashlib
 
 # a savegame osztaly kezeli az egesz jatekot
 class Savegame:
-    def __init__(self, saveList, saveName) -> None:
+    def __init__(self, saveList, saveName, sm: settingsmanager.settingsManager) -> None:
         self.saveName = saveName
         self.saveList = list(saveList)
         self.numberOfPlayers = int(self.saveList[0])
         self.players = list()
         self.transactions = list()
+        self.sm = sm
 
         for i in range(len(self.saveList)):
             if i > 0 and i < (self.numberOfPlayers + 1):
@@ -46,14 +47,17 @@ class Savegame:
     def makeTransaction(self) -> None:
         gc.cls()
         print(gc.MESSAGE)
-        print("Utalo jatekos:")
+        #print("Utalo jatekos:")
+        print(self.sm.TRANSFERING_PLAYER)
         for i in range(len(self.players)):
             print(f"{i+1} - {gc.spacesback(self.players[i].name)}")
-        playerFromIndex = int(input("Valasz: ")) - 1
+        #playerFromIndex = int(input("Valasz: ")) - 1
+        playerFromIndex = int(input(self.sm.OPTION)) - 1
 
         gc.cls()
         print(gc.MESSAGE)
-        print("Fogado jatekos:")
+        #print("Fogado jatekos:")
+        print(self.sm.RECEIVING_PLAYER)
         for i in range(len(self.players)):
             tmp = []
             for x in range(len(self.players)):
@@ -61,7 +65,8 @@ class Savegame:
                     tmp.append(self.players[x])
         for i in range(len(tmp)):
             print(f"{i+1} - {gc.spacesback(tmp[i].name)}")
-        playerTo = tmp[int(input("Valasz: ")) - 1]
+        #playerTo = tmp[int(input("Valasz: ")) - 1]
+        playerTo = tmp[int(input(self.sm.OPTION)) - 1]
         for i in range(len(self.players)):
             if self.players[i] == playerTo:
                 playerToIndex = i
@@ -72,8 +77,9 @@ class Savegame:
         transactionMoney = self.moneyInput()
         
         if transactionMoney <= 0:
-            print("0 osszegu vagy kisebb tranzakcio nem valosithato meg!")
-            gc.wait()
+            #print("0 osszegu vagy kisebb tranzakcio nem valosithato meg!")
+            #gc.wait()
+            gc.wait(self.sm.ZERO_OR_LESS_TRANS_ERROR)
             return None
         if self.players[playerFromIndex].money-transactionMoney >= gc.MIN_MONEY:
             self.players[playerFromIndex].money -= transactionMoney
@@ -83,13 +89,15 @@ class Savegame:
         else:
             gc.cls()
             print(gc.MESSAGE)
-            input("NEM ALL RENDELKEZESRE ELEGENDO EGYENLEG AZ UTALO FEL SZAMLAJAN!\nNyomj ENTER-t a folytatashoz...")
+            #input("NEM ALL RENDELKEZESRE ELEGENDO EGYENLEG AZ UTALO FEL SZAMLAJAN!\nNyomj ENTER-t a folytatashoz...")
+            gc.wait(self.sm.NOT_ENOUGH_FUNDS)
             return None
 
     # Barmikor amikor penzosszeget kell bekerni, azt ezen a fuggvenyen at lehet megtenni
     # Ellenorzi a roviditeseket, mint pl: k, m es ennek megfelelo integer ertekkel ter vissza
     def moneyInput(self) -> int:
-        inputStr = str(input("Osszeg: "))
+        #inputStr = str(input("Osszeg: "))
+        inputStr = str(input(self.sm.MONEY_IN))
         if inputStr.isdecimal():
             return int(inputStr)
         else:
@@ -101,17 +109,20 @@ class Savegame:
                 inputStr = inputStr[:-1]
                 return int(float(inputStr) * 1_000)
             else:
-                input("Hibas a bemenet szintaxisa. Tranzakcio vegrehajtasa 0 osszeggel.\nProbald ujra a tranzakciot.")
+                #input("Hibas a bemenet szintaxisa. Tranzakcio vegrehajtasa 0 osszeggel.\nProbald ujra a tranzakciot.")
+                gc.wait(self.sm.MONEY_IN_SYNTAX_ERROR)
                 return 0
 
     # Ha egy jatekos penzt kap ez a fgv letrehozza a tranzakciot es hozzaadja sajat magahoz illetve a kotodo jatekoshoz
     def givePlayerMoney(self) -> None:
         gc.cls()
         print(gc.MESSAGE)
-        print("Penz hozzaadasa:")
+        #print("Penz hozzaadasa:")
+        print(self.sm.MONEY_GIVING)
         for i in range(len(self.players)):
             print(f"{i+1} - {gc.spacesback(self.players[i].name)}")
-        playerToIndex = int(input("Valasz: ")) - 1
+        #playerToIndex = int(input("Valasz: ")) - 1
+        playerToIndex = int(input(self.sm.OPTION)) - 1
 
         gc.cls()
         print(gc.MESSAGE)
@@ -122,8 +133,9 @@ class Savegame:
             self.addTransaction(transaction.Transaction("h", "bank", self.players[playerToIndex].name, moneyToGive))
         else:
             gc.cls()
-            print("0 vagy negativ erteku tranzakcio nem valosithato meg!")
-            gc.wait()
+            #print("0 vagy negativ erteku tranzakcio nem valosithato meg!")
+            #gc.wait()
+            gc.wait(self.sm.ZERO_OR_LESS_TRANS_ERROR)
         return None
 
     # Ha egy jatekostol el kell venni penzt nem utalas celjabol ez a fgv leelenorzi, hogy megvalosithato-e a tranzakcio
@@ -131,10 +143,12 @@ class Savegame:
     def removePlayerMoney(self) -> None:
         gc.cls()
         print(gc.MESSAGE)
-        print("Penz elvetele:")
+        #print("Penz elvetele:")
+        print(self.sm.MONEY_REMOVING)
         for i in range(len(self.players)):
             print(f"{i+1} - {gc.spacesback(self.players[i].name)}")
-        playerFromIndex = int(input("Valasz: ")) - 1
+        #playerFromIndex = int(input("Valasz: ")) - 1
+        playerFromIndex = int(input(self.sm.OPTION)) - 1
 
         gc.cls()
         print(gc.MESSAGE)
@@ -146,11 +160,13 @@ class Savegame:
                 self.addTransaction(transaction.Transaction("e", self.players[playerFromIndex].name, "bank", moneyToRemove))
             else:
                 gc.cls()
-                print("0 vagy negativ erteku tranzakcio nem valosithato meg!")
-                gc.wait()
+                #print("0 vagy negativ erteku tranzakcio nem valosithato meg!")
+                #gc.wait()
+                gc.wait(self.sm.ZERO_OR_LESS_TRANS_ERROR)
             return None
         else:
-            input("NEM ALL RENDELKEZESRE ELEGENDO OSSZEG!\nNyomj ENTER-t a folytatashoz...")
+            #input("NEM ALL RENDELKEZESRE ELEGENDO OSSZEG!\nNyomj ENTER-t a folytatashoz...")
+            gc.wait(self.sm.NOT_ENOUGH_FUNDS)
             return None
 
     # Amennyiben egy jatekos athalad a startmezon a GC-ben meghatarozott osszeggel letrehoz egy tranzakciot, teljesiti azt
@@ -160,7 +176,8 @@ class Savegame:
         print(gc.MESSAGE)
         for i in range(len(self.players)):
             print(f"{i+1} - {gc.spacesback(self.players[i].name)}")
-        userCh = int(input("Valasz: ")) - 1
+        #userCh = int(input("Valasz: ")) - 1
+        userCh = int(input(self.sm.OPTION)) - 1
 
         self.players[userCh].money += gc.START_MONEY
         self.addTransaction(transaction.Transaction("S", "bank", self.players[userCh].name, gc.START_MONEY))
@@ -214,8 +231,10 @@ class Savegame:
             elif transaction[0] == "e":
                 print(f"{gc.spacesback(transaction[1])} -> - {int(transaction[3]):_}")
             else:
-                print(f"ISMERETLEN TRANZAKCIO ({transaction})")
-        print(f"Osszesen [ {len(self.transactions)} ] tranzakcio")
+                #print(f"ISMERETLEN TRANZAKCIO ({transaction})")
+                print(self.sm.UNKNOWN_TRANSACTION + '(' + str(transaction) + ')')
+        #print(f"Osszesen [ {len(self.transactions)} ] tranzakcio")
+        print(self.sm.ALL_TRANSACTION_PART1 + str(len(self.transactions)) + self.sm.ALL_TRANSACTION_PART2)
         return None
 
     # Ezt a fgv-t csak a jatek elejen kell meghivni
@@ -253,8 +272,9 @@ class Savegame:
 
             if player.money != balance:
                 gc.cls()
-                print("A tranzakciok validalasa sikertelen!\nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
-                gc.wait()
+                #print("A tranzakciok validalasa sikertelen!\nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
+                #gc.wait()
+                gc.wait(self.sm.FAILED_TRANSACTION_VALIDATION)
                 sys.exit()
 
     # Ez a fgv osszehasonlitja a betoltendo fajl hashet a mentettel
@@ -263,8 +283,9 @@ class Savegame:
         selfhash = hashlib.sha512(str(self.getFinalSaveString() + gc.S).encode('utf-8')).hexdigest()
         if hash != selfhash:
             gc.cls()
-            print("A fajl validalasa sikertelen!\nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
-            gc.wait()
+            #print("A fajl validalasa sikertelen!\nEzt valoszinuleg a mentesi fajl helytelen modositasa okozta.")
+            #gc.wait()
+            gc.wait(self.sm.FAILED_FILE_VALIDATION)
             sys.exit()
 
     # Ez a fgv csupan tesztelesi celokat szolgal
@@ -275,19 +296,23 @@ class Savegame:
 
 
 # Beker minden adatot ami elengedhetetlen egy savegame objektum letrehozasahoz majd letrehozza es visszater vele
-def createNewSavegame(startingBudget) -> Savegame:
+def createNewSavegame(startingBudget, sm: settingsmanager.settingsManager) -> Savegame:
+    sm = settingsmanager.settingsManager()
     gc.cls()
     print(gc.BANNER)
 
-    saveName = gc.removespaceSaveName(input("Mentes neve: "))
-    numberOfPlayers = int(input("Jatekosok szama: "))
+    #saveName = gc.removespaceSaveName(input("Mentes neve: "))
+    #numberOfPlayers = int(input("Jatekosok szama: "))
+    saveName = gc.removespaceSaveName(input(sm.NAME_OF_THE_SAVE))
+    numberOfPlayers = int(input(sm.NUMBER_OF_PLAYERS))
     saveList = [numberOfPlayers]
 
     for i in range(numberOfPlayers):
-        saveList.append(player.Player(gc.removespace(input(f"{i+1}. jatekos neve: ")), startingBudget))
+        #saveList.append(player.Player(gc.removespace(input(f"{i+1}. jatekos neve: ")), startingBudget))
+        saveList.append(player.Player(gc.removespace(input(f"{i+1}. {sm.NAME_OF_THE_PLAYER}")), startingBudget))
 
     for i in range(numberOfPlayers):
         saveList.append(transaction.Transaction("K", "bank", saveList[i+1].name, startingBudget))
 
-    return Savegame(saveList, saveName)
+    return Savegame(saveList, saveName, sm)
     
