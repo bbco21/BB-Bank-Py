@@ -305,14 +305,22 @@ def createNewSavegame(startingBudget, sm: settingsmanager.settingsManager) -> Sa
     #numberOfPlayers = int(input("Jatekosok szama: "))
     saveName = gc.removespaceSaveName(input(sm.NAME_OF_THE_SAVE))
     numberOfPlayers = int(input(sm.NUMBER_OF_PLAYERS))
-    saveList = [numberOfPlayers]
+    if numberOfPlayers >= gc.MIN_PLAYERS:
+        saveList = [numberOfPlayers]
 
-    for i in range(numberOfPlayers):
-        #saveList.append(player.Player(gc.removespace(input(f"{i+1}. jatekos neve: ")), startingBudget))
-        saveList.append(player.Player(gc.removespace(input(f"{i+1}. {sm.NAME_OF_THE_PLAYER}")), startingBudget))
+        for i in range(numberOfPlayers):
+            #saveList.append(player.Player(gc.removespace(input(f"{i+1}. jatekos neve: ")), startingBudget))
+            saveList.append(player.Player(gc.removespace(input(f"{i+1}. {sm.NAME_OF_THE_PLAYER}")), startingBudget))
 
-    for i in range(numberOfPlayers):
-        saveList.append(transaction.Transaction("K", "bank", saveList[i+1].name, startingBudget))
+        for i in range(numberOfPlayers):
+            saveList.append(transaction.Transaction("K", "bank", saveList[i+1].name, startingBudget))
 
-    return Savegame(saveList, saveName, sm)
+        return Savegame(saveList, saveName, sm)
+    else:
+        raise InvalidPlayerNumber()
+    
+
+class InvalidPlayerNumber(Exception):
+    def __init__(self) -> None:
+        super().__init__("Less player than the minimum players.")
     
