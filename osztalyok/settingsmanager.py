@@ -215,11 +215,6 @@ class settingsManager():
             with open(gc.LANGUAGEFOLDER + "/English.lang", 'w') as f:
                 f.write(gc.ENGLISH_LANG_CONTENT)
 
-
-    # TODO Make settings menu
-        # Change language and other settings
-
-    
     def getLanguageFiles(self):
         self.availableLanguages = []
         tmpList = os.listdir(gc.LANGUAGEFOLDER)
@@ -239,6 +234,45 @@ class settingsManager():
         else:
             input("Invalid option.\nPress ENTER to continue...")
 
+    def setMinPlayers(self):
+        gc.cls()
+        print(f"Current minimum players: {self.settings['min_players']}")
+        newVal = input("New minimum players: ")
+        if newVal != "":
+            try:
+                newVal = int(newVal)
+                self.settings["min_players"] = newVal
+                self.saveSettings()
+                input(f"Minimum players successfully set to: {self.settings['min_players']}\nPress ENTER to continue...")
+            except:
+                pass
+
+    def setStartMoney(self):
+        gc.cls()
+        print(f"Current start money: {self.settings['start_money']}")
+        newVal = input("New start money: ")
+        if newVal != "":
+            try:
+                newVal = int(newVal)
+                self.settings["start_money"] = newVal
+                self.saveSettings()
+                input(f"Start money successfully set to: {self.settings['start_money']}\nPress ENTER to continue...")
+            except:
+                pass
+
+    def setMinMoney(self):
+        gc.cls()
+        print(f"Current minimum money: {self.settings['min_money']}")
+        newVal = input("New minimum money: ")
+        if newVal != "":
+            try:
+                newVal = int(newVal)
+                self.settings["min_money"] = newVal
+                self.saveSettings()
+                input(f"Minimum money successfully set to: {self.settings['min_money']}\nPress ENTER to continue...")
+            except:
+                pass
+
     def saveSettings(self):
         with open(gc.SETTINGSFILE, 'w') as f:
             f.write(json.dumps(self.settings, indent=4))
@@ -246,12 +280,21 @@ class settingsManager():
     def menu(self):
         gc.cls()
         print("1 - change language")
+        print("2 - change start money")
+        print("3 - change minimum money")
+        print("4 - change minimum players")
         print("0 - go back")
         userCh = input("Option: ")
         if userCh == '0':
             return
         elif userCh == '1':
             self.setLanguage()
+        elif userCh == '2':
+            self.setStartMoney()
+        elif userCh == '3':
+            self.setMinMoney()
+        elif userCh == '4':
+            self.setMinPlayers()
         else:
             input("Invalid option.\nPress ENTER and choose again.")
             self.menu()
